@@ -58,27 +58,29 @@ def expand_all_comments(page):
         view_more = page.get_by_role("button", name="View more comments")
         view_reply = page.locator("button", has_text="View ")
         
-        try:
-            if view_more.is_visible() and view_more.is_enabled():
-                print("Clicking 'View more comments'...")
-                view_more.scroll_into_view_if_needed()
-                view_more.click()
-                time.sleep(3)
-            elif view_reply.is_visible() and view_reply.is_enabled():
-                print("Clicking 'View X reply'...")
-                view_reply.scroll_into_view_if_needed()
-                view_reply.click()
-                time.sleep(2)
-            else:
-                break
-        except Exception as e:
-            print(f"Failed to click button: {e}")
+        # try:
+        if view_more.is_visible() :
+            print("Clicking 'View more comments'...")
+            view_more.scroll_into_view_if_needed()
+            view_more.click()
+            time.sleep(3)
+        elif view_reply.is_visible() :
+            print("Clicking 'View X reply'...")
+            view_reply.scroll_into_view_if_needed()
+            view_reply.click()
+            time.sleep(2)
+        else:
             break
+        # except Exception as e:
+        #     print(f"Failed to click button: {e}")
+        #     break
 
 def get_facebook_comments(login=True):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=HEADLESS_MODE)
-        context = browser.new_context()
+        context = browser.new_context(
+              viewport={"width": 1920, "height": 1080}  # Set to fullscreen-like dimensions
+        )
         page = context.new_page()
 
         if login:
